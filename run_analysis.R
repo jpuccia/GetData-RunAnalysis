@@ -50,18 +50,29 @@ run_analysis <- function(){
         ##
         ##... plus the subject numbers and activity descriptions
         stdAndMeanColumns <- 
-                c(grep("*std*", names(allData)), grep("*mean*", names(allData)), 
-                  grep("*Mean*", names(allData)), grep("subject", names(allData)),
-                  grep("activity", names(allData)))
+                c(grep("*std*", names(testData)), grep("*mean*", names(testData)), 
+                  grep("*Mean*", names(testData)))
+        factorColumns <- 
+                c(grep("subject", names(testData)),
+                  grep("activity", names(testData)))
+        allColumns <- c(stdAndMeanColumns, factorColumns)
+        
+        variableColumnNames <- names(testData)[stdAndMeanColumns]
+        factorColumnNames <- names(testData)[factorColumns]
         
         ## Req. 1. Merges the training and the test sets to create one data set.
         ##
-        allData <- rbind(testData[,stdAndMeanColumns], trainData[,stdAndMeanColumns])
+        allData <- rbind(testData[,allColumns], trainData[,allColumns])
         
         ## Req. 5. From the data set in step 4, creates a second, independent tidy data 
         ##... set with the average of each variable for each activity and each subject.
         ##
-        allData
+        library(reshape2)
+        allDataMelt <- melt(allData, id=factorColumnNames, measure.vars=variableColumnNames)
+        tidyData <- dcast(allDataMelt, subject + activity ~ variable,mean)
+
+        ## TODO: Write the tidyData to a text file
+        tidyData
 }
 
 downloadZipFile <- function(dataFolderName, zipFileAndPath){
