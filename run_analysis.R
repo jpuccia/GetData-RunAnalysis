@@ -44,9 +44,24 @@ run_analysis <- function(){
                 testFileAndPath_train, activityFileAndPath)
         
         ## Merge test and train data together
+        print("Merging Test and Training data together...")
         
-        ##head(testData)
-        ##head(trainData)
+        ## Req. 2. Extracts only the measurements on the mean and standard deviation for each measurement. 
+        ##
+        ##... plus the subject numbers and activity descriptions
+        stdAndMeanColumns <- 
+                c(grep("*std*", names(allData)), grep("*mean*", names(allData)), 
+                  grep("*Mean*", names(allData)), grep("subject", names(allData)),
+                  grep("activity", names(allData)))
+        
+        ## Req. 1. Merges the training and the test sets to create one data set.
+        ##
+        allData <- rbind(testData[,stdAndMeanColumns], trainData[,stdAndMeanColumns])
+        
+        ## Req. 5. From the data set in step 4, creates a second, independent tidy data 
+        ##... set with the average of each variable for each activity and each subject.
+        ##
+        allData
 }
 
 downloadZipFile <- function(dataFolderName, zipFileAndPath){
@@ -98,6 +113,8 @@ buildActivityDataSet <- function(featuresFileAndPath, activityDataFileAndPath,
                 file=activityDataFileAndPath, 
                 header=FALSE, colClasses=as.vector(rep("numeric",561)))
         
+        ## Req. 4. Appropriately labels the data set with descriptive variable names. 
+        ##
         ## Use the feature labels as the header for our activityData
         names(activityData) <- features$V2
         
@@ -116,6 +133,8 @@ buildActivityDataSet <- function(featuresFileAndPath, activityDataFileAndPath,
                 file=activityFileAndPath, 
                 header=FALSE, sep=" ", colClasses=c("integer","character"), strip.white=TRUE)
         
+        ## Req. 3. Uses descriptive activity names to name the activities in the data set
+        ##
         ## Update the activity codes in our activityData with the
         ##... name of each activity
         activityData[, "activity"] <- tests
