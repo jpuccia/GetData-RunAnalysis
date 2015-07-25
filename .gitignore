@@ -1,0 +1,8 @@
+
+*.txt
+
+code_snips.R
+
+data/getdata-projectfiles-UCI HAR Dataset.zip
+
+RunAnalysis.Rproj
