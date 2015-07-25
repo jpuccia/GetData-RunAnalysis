@@ -67,12 +67,14 @@ run_analysis <- function(){
         ## Req. 5. From the data set in step 4, creates a second, independent tidy data 
         ##... set with the average of each variable for each activity and each subject.
         ##
+        print("Building tidy data set ...")
         library(reshape2)
         allDataMelt <- melt(allData, id=factorColumnNames, measure.vars=variableColumnNames)
         tidyData <- dcast(allDataMelt, subject + activity ~ variable,mean)
 
-        ## TODO: Write the tidyData to a text file
-        tidyData
+        ## Write the tidyData to a text file
+        print("Writing tidy data set to file ...")
+        write.table(tidyData, file = "./tidyData.txt", row.names = FALSE)
 }
 
 downloadZipFile <- function(dataFolderName, zipFileAndPath){

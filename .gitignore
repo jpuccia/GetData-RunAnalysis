@@ -1,5 +1,13 @@
 
-*.txt
+data/*.txt
+
+data/UCI HAR Dataset/*.txt
+
+data/UCI HAR Dataset/test/*.txt
+data/UCI HAR Dataset/test/Inertial Signals/*.txt
+
+data/UCI HAR Dataset/train/*.txt
+data/UCI HAR Dataset/train/Inertial Signals/*.txt
 
 code_snips.R
 
