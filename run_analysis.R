@@ -47,14 +47,10 @@ run_analysis <- function(){
         print("Merging Test and Training data together...")
         
         ## Req. 2. Extracts only the measurements on the mean and standard deviation for each measurement. 
+        ##... plus the subject numbers and activity descriptions used as factors.
         ##
-        ##... plus the subject numbers and activity descriptions
-        stdAndMeanColumns <- 
-                c(grep("*std*", names(testData)), grep("*mean*", names(testData)), 
-                  grep("*Mean*", names(testData)))
-        factorColumns <- 
-                c(grep("subject", names(testData)),
-                  grep("activity", names(testData)))
+        stdAndMeanColumns <- getStdAndMeanColumns(testData)
+        factorColumns <- getFactorColumns(testData)
         allColumns <- c(stdAndMeanColumns, factorColumns)
         
         variableColumnNames <- names(testData)[stdAndMeanColumns]
@@ -72,6 +68,9 @@ run_analysis <- function(){
         allDataMelt <- melt(allData, id=factorColumnNames, measure.vars=variableColumnNames)
         tidyData <- dcast(allDataMelt, subject + activity ~ variable,mean)
 
+        ## Clean up the column labels
+        names(tidyData) <- scrubColumnNames(tidyData)
+        
         ## Write the tidyData to a text file
         print("Writing tidy data set to file ...")
         write.table(tidyData, file = "./tidyData.txt", row.names = FALSE)
@@ -163,4 +162,25 @@ buildActivityDataSet <- function(featuresFileAndPath, activityDataFileAndPath,
         
         ## Return the activityData to the caller.
         activityData        
+}
+
+getStdAndMeanColumns <- function(df){
+        c(grep("*std*", names(df)), grep("*mean*", names(df)), 
+          grep("*Mean*", names(df)))
+}
+
+getFactorColumns <- function(df){
+        c(grep("subject", names(df)), grep("activity", names(df)))
+}
+
+scrubColumnNames <- function(tidyData){
+        tidyDataNames <- names(tidyData)
+
+        tidyDataNames <- gsub("-mean", "Mean", tidyDataNames, fixed = TRUE)
+        tidyDataNames <- gsub("-std", "Std", tidyDataNames, fixed = TRUE)
+        tidyDataNames <- gsub("(", "", tidyDataNames, fixed = TRUE)
+        tidyDataNames <- gsub(")", "", tidyDataNames, fixed = TRUE)
+        tidyDataNames <- gsub(",", "", tidyDataNames, fixed = TRUE)
+        tidyDataNames <- gsub("-", "", tidyDataNames, fixed = TRUE)
+        tidyDataNames
 }
