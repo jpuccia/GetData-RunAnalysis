@@ -36,7 +36,8 @@ The data for this project was provided in the course requirements and can be dow
 
 ## Variables  
   
-The variables for the tidy data set are the averages of the standard deviation and mean data variables by test subject and activity from the combined raw data files. A complete list is shown below.  
+The variables for the tidy data set are the averages of the standard deviation and mean data variables by test subject and activity from the combined raw data files. Variables prefixed with a "t" denote time domain variables.  Variables that have "Std" in the name represent the standard deviation and variables with "Mean" represent the mean. The variables that are previed with "Angle" are the angle between two vectors and are in radians/sec.  
+A complete list is shown below.  
 
 subject  
 activity  
